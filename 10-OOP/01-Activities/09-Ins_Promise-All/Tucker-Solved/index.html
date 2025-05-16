@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Actors</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Moana</td>
+                <td>2016</td>
+                <td>The Rock</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tbody = document.querySelector("tbody");
+      const movies = [
+        "Rush Hour 2",
+        "A Knight's Tale",
+        "The Avengers",
+        "Deadpool",
+      ];
+
+      const getMovies = movies.map((movie) =>
+        fetch("http://www.omdbapi.com/?apikey=trilogy&t=" + movie).then(
+          (response) => response.json()
+        )
+      );
+
+      // const hardcodedMovies = [
+      //   fetch("http://www.omdbapi.com/?apikey=trilogy&t=Rush Hour 2").then(
+      //     (response) => response.json()
+      //   ),
+      //   fetch("http://www.omdbapi.com/?apikey=trilogy&t=A Knight's Tale").then(
+      //     (response) => response.json()
+      //   ),
+      //   fetch("http://www.omdbapi.com/?apikey=trilogy&t=The Avengers").then(
+      //     (response) => response.json()
+      //   ),
+      //   fetch("http://www.omdbapi.com/?apikey=trilogy&t=Deadpool").then(
+      //     (response) => response.json()
+      //   ),
+      // ];
+
+      Promise.all(getMovies).then((movieData) => movieData.forEach(createRow));
+
+      function createRow({ Title, Year, Actors }) {
+        const tr = document.createElement("tr");
+        const title = document.createElement("td");
+        title.textContent = Title;
+        const year = document.createElement("td");
+        year.textContent = Year;
+        const actors = document.createElement("td");
+        actors.textContent = Actors;
+
+        tr.append(title, year, actors);
+
+        tbody.append(tr);
+      }
+    </script>
+  </body>
+</html>
